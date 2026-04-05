@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -24,16 +25,24 @@ func main() {
 		query = args[1]
 	}
 
+	output := make([]string, 0)
+
 	err := filepath.WalkDir(targetPath, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
 		if d.IsDir() {
 			return nil
 		}
 		if strings.Contains(path, query) {
-			os.Stdout.Write([]byte(path + "\n"))
+			output = append(output, path+"\n")
 		}
 		return nil
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	slices.Sort(output)
+	os.Stdout.Write([]byte(strings.Join(output, "")))
 }
