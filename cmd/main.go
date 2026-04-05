@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"io/fs"
 	"log"
 	"os"
@@ -10,31 +11,21 @@ import (
 )
 
 func main() {
-	args := os.Args[1:]
-	var targetPath string
-	if len(args) < 1 {
-		targetPath = "."
-	} else {
-		targetPath = args[0]
-	}
+	query := flag.String("q", "", "query to search for")
+	targetPath := flag.String("p", ".", "path you want to search in")
 
-	var query string
-	if len(args) < 2 {
-		query = ""
-	} else {
-		query = args[1]
-	}
+	flag.Parse()
 
 	output := make([]string, 0)
 
-	err := filepath.WalkDir(targetPath, func(path string, d fs.DirEntry, err error) error {
+	err := filepath.WalkDir(*targetPath, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if d.IsDir() {
 			return nil
 		}
-		if strings.Contains(path, query) {
+		if strings.Contains(path, *query) {
 			output = append(output, path+"\n")
 		}
 		return nil
