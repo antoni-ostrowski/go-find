@@ -5,4 +5,4 @@ dev:
   go run ./cmd .
 
 build:
-  go build ./cmd/main.go
+  go build -o ./go-find ./cmd/main.go
