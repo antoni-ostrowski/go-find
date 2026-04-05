@@ -13,7 +13,7 @@ just dev
 ```bash
 just build
 ```
-
+## Usage
 ```bash
 go-find -p <path> -q <query>
 ```
